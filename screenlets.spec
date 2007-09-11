@@ -1,22 +1,21 @@
 %define name screenlets
-%define version 0.0.7
-%define release %mkrel 1
+%define version 0.0.10
+%define release %mkrel 0.4
 
 Name: %name
 Version: %version
 Release: %release
 License: GPL
-URL: http://forum.go-compiz.org/viewtopic.php?t=358
+URL: http://www.screenlets.org/
 Summary: OsX Like Dashboard
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Source: %name-%version.tar.bz2
-Source1: %name-tray
-Source2: logo24.png
-Patch0: screenlets-init.patch 
-Patch1: setup.py.patch
-Patch2: add-screenlet.patch
+Source1: logo24.png
 BuildRequires: python-devel
+BuildRequires: desktop-file-utils
+Requires(post): desktop-file-utils
+Requires(postun): desktop-file-utils
 Requires: python-gnome
 Requires: python-gtk
 Requires: pyxdg
@@ -32,9 +31,11 @@ You need Compiz or Beryl to use screenlets
 
 %prep
 %setup -n %{name}-%{version}
-%patch0 -p1 -b .usr
-%patch1 -p1 -b .patch
-%patch2 -p1 -b .patch
+# Fix paths
+grep -rl '/usr/local' * | xargs sed -i 's,/usr/local,%{_prefix},g'
+# Fix dodgy desktop files
+find -name *.desktop -exec sed -i 's/^\(Exec=.*\) >.*$/\1/' {} \;
+
 %build
 %{__python} setup.py build
 
@@ -42,15 +43,39 @@ You need Compiz or Beryl to use screenlets
 rm -rf %{buildroot}
 %{__python} setup.py install --root %{buildroot}
 
-# Fix a path issue
-sed -i "s,/usr/local,%{_prefix}," %{buildroot}%{_bindir}/screenletsd
-
-install -d %{buildroot}%{_bindir}
-install -m0755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}-tray
 
 install -d %{buildroot}%{_datadir}/%{name}
-install -m0644 %{SOURCE2} %{buildroot}%{_datadir}/%{name}/logo24.png
+install -m0644 %{SOURCE1} %{buildroot}%{_datadir}/%{name}/logo24.png
 
+install -d %{buildroot}%{_datadir}/icons
+install -m0644 desktop-menu/screenlets.svg %{buildroot}%{_datadir}/icons/screenlets.svg
+
+desktop-file-install \
+  --vendor="" \
+  --add-category="Settings" \
+  --add-category="DesktopSettings" \
+  --add-category="X-MandrivaLinux-CrossDesktop" \
+  --dir %{buildroot}%{_datadir}/applications \
+  desktop-menu/%{name}-manager.desktop
+
+echo "Type=Application" >>desktop-menu/%{name}-daemon.desktop
+echo "Icon=%{_datadir}/%{name}/logo24.png" >>desktop-menu/%{name}-daemon.desktop
+desktop-file-install \
+  --vendor="" \
+  --add-category="Settings" \
+  --add-category="DesktopSettings" \
+  --add-category="X-MandrivaLinux-CrossDesktop" \
+  --dir %{buildroot}%{_datadir}/applications \
+  desktop-menu/%{name}-daemon.desktop
+
+
+%post
+%update_menus
+%{update_desktop_database}
+
+%postun
+%clean_menus
+%{clean_desktop_database}
 
 %clean
 rm -rf %{buildroot}
@@ -59,9 +84,17 @@ rm -rf %{buildroot}
 %defattr(-, root, root, 0755)
 %doc CHANGELOG README TODO
 %{_bindir}/screenletsd
-%{_bindir}/%{name}-tray
+%{_bindir}/%{name}-manager
+%{_bindir}/%{name}-packager
+%{_datadir}/applications/%{name}-*.desktop
+%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/logo24.png
-%py_puresitedir/screenlets-0.0.7-py2.5.egg-info
+%dir %{_datadir}/%{name}-manager
+%{_datadir}/%{name}-manager/noimage.svg
+%{_datadir}/%{name}-manager/%{name}-*.py
+%{_datadir}/icons/%{name}.svg
+
+%py_puresitedir/screenlets-%{version}-py2.5.egg-info
 %py_puresitedir/screenlets/*
 %_datadir/screenlets/*
 
