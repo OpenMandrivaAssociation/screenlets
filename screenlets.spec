@@ -20,6 +20,7 @@ BuildRequires: python-devel
 Requires: python-gnome
 Requires: python-gtk
 Requires: pyxdg
+Requires: dbus-python
 
 %description
 Screenlets are small owner-drawn applications (written in Python) 
