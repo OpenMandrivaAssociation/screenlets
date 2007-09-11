@@ -1,6 +1,6 @@
 %define name screenlets
 %define version 0.0.10
-%define release %mkrel 0.4
+%define release %mkrel 1
 
 Name: %name
 Version: %version
