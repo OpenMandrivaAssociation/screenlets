@@ -1,6 +1,6 @@
 %define name screenlets
 %define version 0.0.10
-%define release %mkrel 1
+%define release %mkrel 2
 
 Name: %name
 Version: %version
@@ -20,6 +20,7 @@ Requires: python-gnome
 Requires: python-gtk
 Requires: pyxdg
 Requires: dbus-python
+Requires: gnome-python-desktop
 
 %description
 Screenlets are small owner-drawn applications (written in Python) 
