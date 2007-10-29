@@ -1,6 +1,6 @@
 %define name screenlets
 %define version 0.0.10
-%define release %mkrel 2
+%define release %mkrel 3
 
 Name: %name
 Version: %version
@@ -11,6 +11,7 @@ Summary: OsX Like Dashboard
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Source: %name-%version.tar.bz2
+Patch0: fix-dotdesktop.patch
 Source1: logo24.png
 BuildRequires: python-devel
 BuildRequires: desktop-file-utils
@@ -32,6 +33,7 @@ You need Compiz or Beryl to use screenlets
 
 %prep
 %setup -n %{name}-%{version}
+%patch0 -p0 -b .desktop
 # Fix paths
 grep -rl '/usr/local' * | xargs sed -i 's,/usr/local,%{_prefix},g'
 # Fix dodgy desktop files
