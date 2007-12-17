@@ -9,7 +9,6 @@ License: GPL
 URL: http://www.screenlets.org/
 Summary: OsX Like Dashboard
 Group: System/X11
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
 Source: %name-%version.tar.bz2
 Patch0: fix-dotdesktop.patch
 Source1: logo24.png
