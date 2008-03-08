@@ -1,16 +1,16 @@
 %define name screenlets
-%define version 0.0.10
-%define release %mkrel 3
+%define version 0.0.12
+%define release %mkrel 1
 
 Name: %name
 Version: %version
 Release: %release
 License: GPL
 URL: http://www.screenlets.org/
-Summary: OsX Like Dashboard
+Summary: Widget mini-apps (like OSX Dashboard or Vista Gadgets)
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-Source: %name-%version.tar.bz2
+Source: %name-%version.tar.gz
 Patch0: fix-dotdesktop.patch
 Source1: logo24.png
 BuildRequires: python-devel
@@ -29,10 +29,10 @@ that can be described as "the virtual representation of things
 lying/standing around on your desk". Sticknotes, clocks, rulers, ... 
 the possibilities are endless
 
-You need Compiz or Beryl to use screenlets
+Screenlets work best with the Widget plugin for Compiz Fusion.
 
 %prep
-%setup -n %{name}-%{version}
+%setup -n %{name}
 %patch0 -p0 -b .desktop
 # Fix paths
 grep -rl '/usr/local' * | xargs sed -i 's,/usr/local,%{_prefix},g'
@@ -45,7 +45,8 @@ find -name *.desktop -exec sed -i 's/^\(Exec=.*\) >.*$/\1/' {} \;
 %install
 rm -rf %{buildroot}
 %{__python} setup.py install --root %{buildroot}
-
+# Remove useless egg-info file
+rm -f %{buildroot}%{py_puresitedir}/*.egg-info
 
 install -d %{buildroot}%{_datadir}/%{name}
 install -m0644 %{SOURCE1} %{buildroot}%{_datadir}/%{name}/logo24.png
@@ -97,9 +98,8 @@ rm -rf %{buildroot}
 %{_datadir}/%{name}-manager/%{name}-*.py
 %{_datadir}/icons/%{name}.svg
 
-%py_puresitedir/screenlets-%{version}-py2.5.egg-info
-%py_puresitedir/screenlets/*
-%_datadir/screenlets/*
+%{py_puresitedir}/screenlets/*
+%{_datadir}/screenlets/*
 
 
 
