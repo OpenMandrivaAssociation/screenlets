@@ -1,6 +1,6 @@
 %define name screenlets
 %define version 0.0.12
-%define release %mkrel 1
+%define release %mkrel 2
 
 Name: %name
 Version: %version
@@ -17,8 +17,6 @@ BuildRequires: python-devel
 BuildRequires: desktop-file-utils
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
-Requires: python-gnome
-Requires: python-gtk
 Requires: pyxdg
 Requires: dbus-python
 Requires: gnome-python-desktop
