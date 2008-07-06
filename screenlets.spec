@@ -1,6 +1,6 @@
 %define name screenlets
-%define version 0.0.12
-%define release %mkrel 2
+%define version 0.1.2
+%define release %mkrel 1
 
 Name: %name
 Version: %version
@@ -10,11 +10,12 @@ URL: http://www.screenlets.org/
 Summary: Widget mini-apps (like OSX Dashboard or Vista Gadgets)
 Group: System/X11
 BuildRoot: %{_tmppath}/%{name}-%{version}-root
-Source: %name-%version.tar.gz
+Source: %name-%version.tar.bz2
 Patch0: fix-dotdesktop.patch
 Source1: logo24.png
 BuildRequires: python-devel
 BuildRequires: desktop-file-utils
+Buildarch: noarch
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires: pyxdg
@@ -30,7 +31,7 @@ the possibilities are endless
 Screenlets work best with the Widget plugin for Compiz Fusion.
 
 %prep
-%setup -n %{name}
+%setup -qn %{name}
 %patch0 -p0 -b .desktop
 # Fix paths
 grep -rl '/usr/local' * | xargs sed -i 's,/usr/local,%{_prefix},g'
@@ -60,7 +61,6 @@ desktop-file-install \
   --dir %{buildroot}%{_datadir}/applications \
   desktop-menu/%{name}-manager.desktop
 
-echo "Type=Application" >>desktop-menu/%{name}-daemon.desktop
 echo "Icon=%{_datadir}/%{name}/logo24.png" >>desktop-menu/%{name}-daemon.desktop
 desktop-file-install \
   --vendor="" \
@@ -70,6 +70,7 @@ desktop-file-install \
   --dir %{buildroot}%{_datadir}/applications \
   desktop-menu/%{name}-daemon.desktop
 
+%find_lang %name %name %name-manager
 
 %if %mdkversion < 200900
 %post
@@ -86,22 +87,12 @@ desktop-file-install \
 %clean
 rm -rf %{buildroot}
 
-%files
+%files -f %name.lang
 %defattr(-, root, root, 0755)
 %doc CHANGELOG README TODO
-%{_bindir}/screenletsd
-%{_bindir}/%{name}-manager
-%{_bindir}/%{name}-packager
+%{_bindir}/*
 %{_datadir}/applications/%{name}-*.desktop
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/logo24.png
-%dir %{_datadir}/%{name}-manager
-%{_datadir}/%{name}-manager/noimage.svg
-%{_datadir}/%{name}-manager/%{name}-*.py
+%{_datadir}/%{name}
+%{_datadir}/%{name}-manager
 %{_datadir}/icons/%{name}.svg
-
 %{py_puresitedir}/screenlets/*
-%{_datadir}/screenlets/*
-
-
-
