@@ -1,16 +1,12 @@
-%define name screenlets
-%define version 0.1.2
-%define release %mkrel 3
-
-Name: %name
-Version: %version
-Release: %release
-License: GPL
+Name: screenlets
+Version: 0.1.5
+Release: 1
+License: GPLv2
 URL: http://www.screenlets.org/
 Summary: Widget mini-apps (like OSX Dashboard or Vista Gadgets)
 Group: System/X11
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
-Source: %name-%version.tar.bz2
+# https://code.launchpad.net/screenlets/trunk
+Source0: %name-%version.tar.bz2
 Patch0: fix-dotdesktop.patch
 Source1: logo24.png
 BuildRequires: python-devel
