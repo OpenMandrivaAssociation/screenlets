@@ -27,7 +27,7 @@ the possibilities are endless
 Screenlets work best with the Widget plugin for Compiz Fusion.
 
 %prep
-%setup -qn %{name}
+%setup -q
 %patch0 -p0 -b .desktop
 # Fix paths
 grep -rl '/usr/local' * | xargs sed -i 's,/usr/local,%{_prefix},g'
@@ -90,5 +90,7 @@ rm -rf %{buildroot}
 %{_datadir}/applications/%{name}-*.desktop
 %{_datadir}/%{name}
 %{_datadir}/%{name}-manager
-%{_datadir}/icons/%{name}.svg
+%{_iconsdir}/%{name}.svg
+%{_iconsdir}/hicolor/scalable/apps/*svg
+%{_iconsdir}/ubuntu-mono-*/apps/24/*svg
 %{py_puresitedir}/screenlets/*
