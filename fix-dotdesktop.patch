@@ -1,0 +1,10 @@
+--- src/share/screenlets-manager/screenlets-manager.py.orig	2011-08-20 09:50:41.000000000 -0600
++++ src/share/screenlets-manager/screenlets-manager.py	2011-10-25 17:11:11.204440531 -0600
+@@ -876,6 +876,7 @@
+ 				code.append('Type=Application')
+ 				code.append('Exec= python -u %s/%sScreenlet.py > /dev/null' % (path, name))
+ 				code.append('X-GNOME-Autostart-enabled=true')
++				code.append('Type=Application')
+ 				#print code
+ 				f = open(starter, 'w')
+ 				if f:
