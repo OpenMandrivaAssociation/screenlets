@@ -2,7 +2,7 @@ Name:		screenlets
 Version:	0.1.6
 Release:	1
 License:	GPLv2
-Url:		http://www.screenlets.org/
+Url:		https://www.screenlets.org/
 Summary:	Widget mini-apps (like OSX Dashboard or Vista Gadgets)
 Group:		System/X11
 # https://code.launchpad.net/screenlets/trunk
